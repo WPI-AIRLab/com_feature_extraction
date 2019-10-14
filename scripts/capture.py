@@ -46,7 +46,7 @@ def extract_pixels(img, color_img):
     
     height = img.width
     width = img.height
-    print width, height
+    #print width, height
     # Getting the threshold values
     threshold = []
     with open('threshold_values.txt', 'r') as f:
@@ -57,33 +57,32 @@ def extract_pixels(img, color_img):
             threshold.append(numbers_int)
 
     threshold = (np.array(threshold))
-    print threshold.shape
+    print 'threshold.shape:', threshold.shape
 
     cv2.CV_LOAD_IMAGE_UNCHANGED  = -1
     bridge = CvBridge()
     depth_image = bridge.imgmsg_to_cv2(img, desired_encoding="passthrough")
-    color_image = bridge.imgmsg_to_cv2(color_img, desired_encoding="passthrough")
+    color_image = bridge.imgmsg_to_cv2(color_img, desired_encoding="bgr8")
 
-    print depth_image.shape
-    print color_image.shape
-    print color_image[2][0]
-    gray = cv2.cvtColor(color_image, cv2.COLOR_BGR2GRAY)
-    cv2.imshow("gray", gray)
+    print 'depth image shape:', depth_image.shape
+    print 'color image shape:', color_image.shape
+    cv2.imshow('color image', color_image)
     cv2.waitKey(0)
 
     w, h = 640, 480
-    object_pixels = [[255 for x in range(w)] for y in range(h)]
-    print (np.array(object_pixels)).shape
+    object_pixels = [[[255 for z in range(3)] for x in range(w)] for y in range(h)]
+    object_pixels = np.array(object_pixels, dtype = np.uint8)
+    print 'object pixels shape:', object_pixels.shape
 
     for y in range(height):
         for x in range(width):
             if depth_image[x][y] < threshold[x][y]:
-                object_pixels[x][y] = gray[x][y]
+                object_pixels[x][y] = color_image[x][y]
     
     
     # Visualize it
-    object_pixels = np.array(object_pixels, dtype = np.uint8)
-    #color_object = cv2.cvtColor(object_pixels,cv2.COLOR_GRAY2RGB)
+    # object_pixels = np.array(object_pixels, dtype = np.uint8)
+    # color_object = cv2.cvtColor(object_pixels, cv2.COLOR_GRAY2RGB)
     cv2.imshow("object_only", object_pixels)
     cv2.waitKey(0)
 
