@@ -1,7 +1,7 @@
 # Don't track content of these folders
+scripts/threshold_values.txt
 
 
 
 # Compiled source #
 ###################
-*.txt
