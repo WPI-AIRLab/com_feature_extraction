@@ -64,6 +64,14 @@ def extract_pixels(img, color_img):
     depth_image = bridge.imgmsg_to_cv2(img, desired_encoding="passthrough")
     color_image = bridge.imgmsg_to_cv2(color_img, desired_encoding="bgr8")
 
+    # Denoising depth image
+    # denoised_depth = cv2.fastNlMeansDenoising(depth_image, None, 7, 13)
+    # cv2.imshow("color_image", color_image)
+    # cv2.waitKey(0)
+    # cv2.imshow("denoised", denoised_depth)
+    # cv2.waitKey(0)
+
+
     print 'depth image shape:', depth_image.shape
     print 'color image shape:', color_image.shape
     cv2.imshow('color image', color_image)
@@ -81,8 +89,6 @@ def extract_pixels(img, color_img):
     
     
     # Visualize it
-    # object_pixels = np.array(object_pixels, dtype = np.uint8)
-    # color_object = cv2.cvtColor(object_pixels, cv2.COLOR_GRAY2RGB)
     cv2.imshow("object_only", object_pixels)
     cv2.waitKey(0)
 
